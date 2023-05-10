@@ -20,6 +20,7 @@ class Player:
         self.x = random.randint(1, board_width - 2)
         self.y = random.randint(1, board_height - 2)
         self.body = [Vector2(self.x,self.y)]
+        self.health = 1000
         self.pixel_move = 2 # 2 pixel per one second
         self.wait_time = 500 # 500 ms
         self.last_move_time = pygame.time.get_ticks() # this function find from internet! SORRY :( its from stackoverflow..
@@ -47,6 +48,7 @@ class Enemy :
         self.x = random.randint(1, board_width -2)
         self.y = random.randint(1, board_height -2)
         self.body = [Vector2(self.x,self.y)]
+        self.health = self.cell_size
         self.pixel_move = 2 # 2 pixel per one second
         self.wait_time = 500  # 500 ms
         self.last_move_time = pygame.time.get_ticks()
@@ -104,7 +106,7 @@ enemies = []
 for _ in range(10):
     enemy = Enemy(board.board_width, board.board_height)
     enemies.append(enemy)
-
+score_table = [0,0,0,0]
 game_over = False
 
 while not game_over:
@@ -123,23 +125,34 @@ while not game_over:
                 player.move(0, -1)
                 for enemy in enemies :
                     if enemy.body == player.body and enemy.body == player.body:
+                        player.health -= 100
+                        score_table[0]= player.health
                         game_over = True
             elif event.key == pygame.K_DOWN:
                 player.move(0, 1)
                 for enemy in enemies :
                     if enemy.body == player.body and enemy.body == player.body:
+                        player.health -= 100
+                        score_table[1]= player.health
                         game_over = True
             elif event.key == pygame.K_LEFT:
                 player.move(-1, 0)
                 for enemy in enemies :
                     if enemy.body == player.body and enemy.body == player.body:
+                        player.health -= 100
+                        score_table[2]= player.health
                         game_over = True
             elif event.key == pygame.K_RIGHT:
                 player.move(1, 0)
                 for enemy in enemies :
                     if enemy.body == player.body and enemy.body == player.body:
+                        player.health -= 100
+                        score_table[3]= player.health
                         game_over = True
-           
+    score = 0
+    for _ in range(4):
+        score += score_table[_]
+    print(score)
     board.print_board()
     player.draw_player(board.screen)
     for enemy in enemies:
